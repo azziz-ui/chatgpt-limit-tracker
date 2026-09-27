@@ -105,6 +105,28 @@ try {
   await popup.locator("#save").click();
   await page.waitForFunction(() => document.querySelector("#clt-tokens").shadowRoot.querySelector(".token-track").hidden === true);
   console.log("PASS: popup settings; storage contains no messages, auth or usage");
+
+  await page.evaluate(() => { document.documentElement.lang = "ru-RU"; });
+  await page.waitForFunction(() => document.querySelector("#clt-usage")?.shadowRoot.textContent.includes("Сессия · 5 ч"));
+  assert.ok((await page.locator("#clt-tokens .tokens").innerText()).includes("токенов"));
+  assert.ok((await page.locator("#clt-usage .windows").innerText()).includes("22,8%"));
+  assert.equal(await page.locator("#clt-usage .refresh").getAttribute("aria-label"), "Обновить данные");
+  await page.bringToFront();
+  await popup.reload();
+  await popup.waitForFunction(() => document.documentElement.lang === "ru");
+  assert.equal(await popup.locator("[data-i18n=popupTokensTitle]").innerText(), "Токены беседы");
+  assert.equal(await popup.locator("#context-limit").getAttribute("placeholder"), "Без шкалы");
+  await page.evaluate(() => { document.documentElement.removeAttribute("lang"); });
+  const browserLocale = await page.evaluate(() => /^ru(?:-|$)/i.test(navigator.languages?.[0] || navigator.language) ? "ru" : "en");
+  await page.waitForFunction((locale) => document.querySelector("#clt-usage")?.shadowRoot.textContent
+    .includes(locale === "ru" ? "Сессия · 5 ч" : "Session · 5h"), browserLocale);
+  await page.evaluate(() => { document.documentElement.lang = "en-US"; });
+  await page.waitForFunction(() => document.querySelector("#clt-usage")?.shadowRoot.textContent.includes("Session · 5h"));
+  await page.bringToFront();
+  await popup.reload();
+  await popup.waitForFunction(() => document.documentElement.lang === "en");
+  assert.equal(await popup.locator("[data-i18n=popupTokensTitle]").innerText(), "Conversation tokens");
+  console.log("PASS: ChatGPT page language changes update both widgets and popup without a reload");
   await popup.close();
   await manager.close();
   await page.screenshot({ path: path.join(artifacts, "preview-dark.png") });
@@ -129,7 +151,7 @@ try {
     document.querySelector("main").innerHTML = '<div data-message-author-role="user" data-message-id="u2">hello</div>';
     history.pushState({}, "", "/g/g-test/c/second");
   });
-  await page.waitForFunction(() => document.querySelector("#clt-tokens").shadowRoot.querySelector(".tokens").innerText.includes("≈ 1 tokens"));
+  await page.waitForFunction(() => document.querySelector("#clt-tokens").shadowRoot.querySelector(".tokens").innerText.includes("≈ 1 token"));
   assert.equal(await page.locator("#clt-tokens").count(), 1);
   console.log("PASS: SPA navigation clears previous conversation and counts new branch");
 

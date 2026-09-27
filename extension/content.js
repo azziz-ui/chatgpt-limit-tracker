@@ -1,10 +1,14 @@
 (() => {
   "use strict";
   const core = globalThis.CLTCore;
-  if (!core || document.getElementById("clt-tokens")) return;
+  const i18n = globalThis.CLTI18n;
+  if (!core || !i18n || document.getElementById("clt-tokens")) return;
+
+  const browserLanguage = navigator.languages?.[0] || navigator.language;
 
   const state = {
     settings: { ...core.DEFAULTS },
+    locale: i18n.resolve(document.documentElement.lang, browserLanguage),
     route: location.pathname,
     epoch: -1,
     snapshot: null,
@@ -16,7 +20,8 @@
     streaming: false
   };
   const countCache = new Map();
-  const number = new Intl.NumberFormat("en-US");
+  const tr = (key, params) => i18n.t(state.locale, key, params);
+  const formatNumber = (value) => new Intl.NumberFormat(i18n.localeTag(state.locale)).format(value);
   let scheduled = false;
   let lastResetRefresh = 0;
   let lastGenerationRefresh = 0;
@@ -95,18 +100,18 @@
   const usage = widget("clt-usage");
   usage.host.style.cssText = "display:block;width:100%;flex:0 0 100%;grid-column:1/-1;padding:0 14px 5px;box-sizing:border-box;";
   const usageBox = element("section", "usage");
-  usageBox.setAttribute("aria-label", "Work / Codex usage");
+  usageBox.setAttribute("aria-label", tr("usageAria"));
   const windows = element("div", "windows");
   const emptyState = element("div", "empty-state");
   const footer = element("div", "footer");
   const source = element("span", "source", "Work / Codex");
-  source.title = "Shared Work / Codex allowance from ChatGPT. This is not the message limit for regular Chat.";
+  source.title = tr("sourceTitle");
   const dot = element("span", "dot");
   const statusLabel = element("span", "status");
   const refresh = element("button", "refresh", "↻");
   refresh.type = "button";
-  refresh.title = "Refresh usage";
-  refresh.setAttribute("aria-label", "Refresh usage");
+  refresh.title = tr("refresh");
+  refresh.setAttribute("aria-label", tr("refresh"));
   refresh.addEventListener("click", () => send("refresh"));
   footer.append(source, dot, statusLabel, refresh);
   usageBox.append(windows, emptyState, footer);
@@ -181,26 +186,24 @@
   }
 
   function renderTokens() {
-    tokenLabel.textContent = `≈ ${number.format(state.tokens)} tokens`;
+    tokenLabel.textContent = i18n.tokenCount(state.tokens, state.locale);
     const limit = state.settings.contextLimit;
     tokenTrack.hidden = !limit;
     if (limit) setFill(tokenFill, state.tokens / limit * 100);
     tokenRow.title = [
-      "Approximate text token count for the current conversation branch (o200k_base).",
-      state.source === "api" ? "History loaded from ChatGPT; the current response updates from the page."
-        : "Only messages currently loaded on the page are counted.",
-      "Excludes hidden instructions, reasoning, and file/image contents. This is not the model's actual context usage.",
-      limit ? `Bar uses your manually entered reference: ${number.format(limit)} tokens.`
-        : "To show a reference bar, enter a context size in the extension settings."
+      tr("tokensDescription"),
+      tr(state.source === "api" ? "tokensHistory" : "tokensVisible"),
+      tr("tokensLimitations"),
+      limit ? tr("tokensReference", { count: formatNumber(limit) }) : tr("tokensNoReference")
     ].join("\n");
   }
 
   function errorText(code) {
-    if (code === "signed-out" || code === "http-401") return "Sign in to ChatGPT and press ↻";
-    if (code === "http-403") return "ChatGPT denied access to usage";
-    if (code === "http-429") return "Too many requests — try again later";
-    if (code === "unsupported" || code === "http-404") return "ChatGPT did not provide quota data";
-    return "Could not load usage · press ↻";
+    if (code === "signed-out" || code === "http-401") return tr("signIn");
+    if (code === "http-403") return tr("forbidden");
+    if (code === "http-429") return tr("rateLimited");
+    if (code === "unsupported" || code === "http-404") return tr("unsupported");
+    return tr("loadFailed");
   }
 
   function renderUsage() {
@@ -210,7 +213,7 @@
     windows.replaceChildren();
     windows.hidden = !data;
     emptyState.hidden = Boolean(data);
-    emptyState.textContent = state.status === "loading" ? "Loading usage…" : "Usage: no data";
+    emptyState.textContent = tr(state.status === "loading" ? "loading" : "noData");
     source.textContent = data?.plan ? `Work / Codex · ${data.plan}` : "Work / Codex";
     let expired = false;
     if (data) {
@@ -218,34 +221,36 @@
       for (const item of data.windows) {
         const windowBox = element("div", "window");
         const line = element("div", "line");
-        const label = element("span", "label", `${item.label}: `);
-        const percent = element("span", "percent", item.used === null ? "—" : `${number.format(Math.round(item.used * 10) / 10)}%`);
+        const windowLabel = i18n.windowLabel(item, state.locale);
+        const label = element("span", "label", `${windowLabel}: `);
+        const percent = element("span", "percent", item.used === null ? "—" : `${formatNumber(Math.round(item.used * 10) / 10)}%`);
         label.append(percent);
         const passed = item.resetAt !== null && item.resetAt <= now;
         expired ||= passed;
-        const reset = element("span", "reset", item.resetAt === null ? "reset unknown"
-          : passed ? "awaiting reset" : `resets in ${core.formatDuration(item.resetAt - now)}`);
+        const reset = element("span", "reset", item.resetAt === null ? tr("resetUnknown")
+          : passed ? tr("awaitingReset") : tr("resetsIn", { duration: i18n.formatDuration(item.resetAt - now, state.locale) }));
         const track = element("span", `track${item.used === null ? " unknown" : ""}`);
         track.setAttribute("role", "progressbar");
-        track.setAttribute("aria-label", `${item.label}: used`);
+        track.setAttribute("aria-label", tr("usedAria", { label: windowLabel }));
         track.setAttribute("aria-valuemin", "0");
         track.setAttribute("aria-valuemax", "100");
         if (item.used !== null) track.setAttribute("aria-valuenow", String(Math.min(100, item.used)));
         const fill = element("span", "fill");
         setFill(fill, item.used ?? 0);
         track.append(fill);
-        windowBox.title = `${item.used === null ? "Percentage not provided" : `${item.used}% used`}. Shared Work / Codex allowance.`
-          + (item.resetAt ? `\nResets: ${new Date(item.resetAt).toLocaleString("en-US")}` : "");
+        windowBox.title = tr("windowTitle", { value: item.used === null ? tr("percentageUnknown")
+          : tr("percentageUsed", { percent: formatNumber(item.used) }) })
+          + (item.resetAt ? `\n${tr("resetsAt", { time: new Date(item.resetAt).toLocaleString(i18n.localeTag(state.locale)) })}` : "");
         line.append(label, reset);
         windowBox.append(line, track);
         windows.append(windowBox);
       }
     }
     const stale = data && now - data.fetchedAt > 180000;
-    statusLabel.textContent = state.status === "loading" ? "refreshing…"
-      : state.status === "error" ? (data ? "stale data · refresh failed" : errorText(state.error))
-        : expired ? "waiting for updated data" : stale ? "stale data · press ↻" : "used · ChatGPT data";
-    statusLabel.title = data ? `Last updated: ${new Date(data.fetchedAt).toLocaleTimeString("en-US")}` : errorText(state.error);
+    statusLabel.textContent = state.status === "loading" ? tr("refreshing")
+      : state.status === "error" ? (data ? tr("staleError") : errorText(state.error))
+        : expired ? tr("waitingForReset") : stale ? tr("stale") : tr("upToDate");
+    statusLabel.title = data ? tr("lastUpdated", { time: new Date(data.fetchedAt).toLocaleTimeString(i18n.localeTag(state.locale)) }) : errorText(state.error);
     dot.style.opacity = stale || state.status === "error" ? ".35" : "1";
     if (expired && document.visibilityState === "visible" && now - lastResetRefresh > 60000) {
       lastResetRefresh = now;
@@ -262,9 +267,22 @@
     }
   }
 
+  function checkLocale() {
+    const locale = i18n.resolve(document.documentElement.lang, browserLanguage);
+    if (locale === state.locale) return;
+    state.locale = locale;
+    usageBox.setAttribute("aria-label", tr("usageAria"));
+    source.title = tr("sourceTitle");
+    refresh.title = tr("refresh");
+    refresh.setAttribute("aria-label", tr("refresh"));
+    renderTokens();
+    renderUsage();
+  }
+
   function update() {
     scheduled = false;
     checkRoute();
+    checkLocale();
     mount();
     countConversation();
     const streaming = Boolean(document.querySelector('[data-testid="stop-button"], [data-testid="stop-generation-button"]'));
@@ -324,16 +342,18 @@
   });
   chrome.runtime.onMessage.addListener((message, _sender, respond) => {
     if (message.type === "clt-refresh") { send("refresh"); respond({ ok: true }); }
+    if (message.type === "clt-locale") { checkLocale(); respond({ locale: state.locale }); }
   });
 
   new MutationObserver(schedule).observe(document.documentElement, {
     childList: true, subtree: true, characterData: true, attributes: true,
-    attributeFilter: ["class", "data-theme", "data-message-id", "data-testid"]
+    attributeFilter: ["class", "data-theme", "data-message-id", "data-testid", "lang"]
   });
   window.addEventListener("popstate", schedule);
   setInterval(() => {
     if (document.visibilityState !== "visible") return;
     if (state.route !== location.pathname) schedule();
+    checkLocale();
     renderUsage();
   }, 1000);
   update();

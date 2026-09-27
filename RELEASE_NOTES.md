@@ -1,15 +1,12 @@
-# v1.0.2 — English interface and documentation
+# v1.0.3 — Automatic English / Russian UI
 
-All user-facing text is now in English: the extension popup, token and usage labels, status and error messages, screenshots, banner, social preview, and README. The extension's behavior is unchanged.
+The extension now follows the language declared by the ChatGPT page. If ChatGPT does not specify a language, it uses the browser language. English and Russian are supported; other languages fall back to English.
 
-### Included features
+- Token counter, usage bars, reset countdowns, tooltips, accessibility labels, error messages, and popup settings switch together.
+- Changing the ChatGPT page language updates the widgets without reloading the page.
+- The popup asks the active ChatGPT tab for its language; outside ChatGPT, it falls back to the browser language.
+- Usage values and privacy behavior are unchanged.
 
-- Approximate token count for the current conversation branch in the ChatGPT header.
-- Shared Work / Codex usage bars and server-reported reset times below the composer.
-- Light and dark themes, including narrow screens.
-- Local processing with no API key or third-party servers.
-- Optional, manually configured context reference bar (no guessed default).
+**Install:** download the attached `chatgpt-limit-tracker-1.0.3.zip`, extract it, and select the inner `chatgpt-limit-tracker` folder in `chrome://extensions` → **Load unpacked** (with **Developer mode** enabled). If updating an unpacked installation, replace the files, click **Reload** in `chrome://extensions`, and reload the ChatGPT tab.
 
-**Install:** download the attached `chatgpt-limit-tracker-1.0.2.zip`, extract it, and select the inner `chatgpt-limit-tracker` folder in `chrome://extensions` → **Load unpacked** (after enabling **Developer mode**).
-
-The usage bars track **Work / Codex**, not the separate limits for regular Chat. README screenshots use simulated API data. See the README for details and limitations.
+The usage bars track the shared **Work / Codex** allowance, not the separate limits for regular Chat. See the README for details.

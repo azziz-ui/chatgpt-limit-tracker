@@ -9,34 +9,35 @@
 <body>
   <header>
     <img src="icons/48.png" width="32" height="32" alt="">
-    <div><h1>Limit Tracker</h1><p>for ChatGPT</p></div>
-    <span class="version">1.0.2</span>
+    <div><h1>Limit Tracker</h1><p data-i18n="popupForChatGPT">for ChatGPT</p></div>
+    <span class="version">1.0.3</span>
   </header>
   <main>
     <section>
-      <h2>Conversation tokens</h2>
-      <p>The counter above the chat estimates text tokens in the current conversation branch. Hidden instructions, reasoning, and attachments are excluded.</p>
-      <p class="hint">By default, only the number is shown: ChatGPT does not provide a reliable context size for the bar.</p>
+      <h2 data-i18n="popupTokensTitle">Conversation tokens</h2>
+      <p data-i18n="popupTokensBody">The counter above the chat estimates text tokens in the current conversation branch. Hidden instructions, reasoning, and attachments are excluded.</p>
+      <p class="hint" data-i18n="popupTokensHint">By default, only the number is shown: ChatGPT does not provide a reliable context size for the bar.</p>
       <details>
-        <summary>Advanced · reference bar</summary>
-        <label for="context-limit">Enter context size manually</label>
+        <summary data-i18n="popupAdvanced">Advanced · reference bar</summary>
+        <label for="context-limit" data-i18n="popupContextLabel">Enter context size manually</label>
         <div class="input-row">
-          <input id="context-limit" type="number" min="1024" max="10000000" step="1" placeholder="No bar" aria-describedby="context-help">
-          <span>tokens</span>
+          <input id="context-limit" type="number" min="1024" max="10000000" step="1" placeholder="No bar" data-i18n-placeholder="popupNoBar" aria-describedby="context-help">
+          <span data-i18n="popupTokenUnit">tokens</span>
         </div>
-        <p id="context-help" class="hint">Only use this if you know the size for your plan and mode. An API model's context window may differ from ChatGPT's. Leave blank to hide the bar.</p>
-        <button id="save" class="primary" type="button">Save</button>
+        <p id="context-help" class="hint" data-i18n="popupContextHelp">Only use this if you know the size for your plan and mode. An API model's context window may differ from ChatGPT's. Leave blank to hide the bar.</p>
+        <button id="save" class="primary" type="button" data-i18n="popupSave">Save</button>
       </details>
     </section>
     <section>
-      <h2>Usage below the composer</h2>
-      <p>Server-reported usage and reset times for the shared <strong>Work / Codex</strong> allowance. These are not the separate limits for regular Chat.</p>
-      <button id="refresh" class="secondary" type="button">Refresh usage on this tab</button>
+      <h2 data-i18n="popupUsageTitle">Usage below the composer</h2>
+      <p data-i18n="popupUsageBody">Server-reported usage and reset times for the shared Work / Codex allowance. These are not the separate limits for regular Chat.</p>
+      <button id="refresh" class="secondary" type="button" data-i18n="popupRefresh">Refresh usage on this tab</button>
     </section>
     <p id="feedback" role="status" aria-live="polite"></p>
   </main>
-  <footer>Processed locally · no API key required</footer>
+  <footer data-i18n="popupFooter">Processed locally · no API key required</footer>
   <script src="core.js"></script>
+  <script src="i18n.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

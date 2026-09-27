@@ -3,6 +3,7 @@ const assert = require("node:assert/strict");
 const vm = require("node:vm");
 const fs = require("node:fs");
 const core = require("../extension/core.js");
+const i18n = require("../extension/i18n.js");
 
 function node(id, parent, role, text, metadata = {}) {
   return { parent, message: { id, author: { role }, content: { parts: [text] }, metadata } };
@@ -107,4 +108,35 @@ test("bundled tokenizer handles English text, emoji, code and literal special-to
   }
   assert.equal(context.CLTTokenizer.count(""), 0);
   assert.equal(context.CLTTokenizer.count("hello"), 1);
+});
+
+test("ChatGPT page locale takes priority over browser language", () => {
+  assert.equal(i18n.resolve("ru-RU", "en-US"), "ru");
+  assert.equal(i18n.resolve("en-GB", "ru-RU"), "en");
+  assert.equal(i18n.resolve("", "ru-RU"), "ru");
+  assert.equal(i18n.resolve(undefined, "en-US"), "en");
+  assert.equal(i18n.resolve("de-DE", "ru-RU"), "en");
+});
+
+test("usage labels and countdowns localize without changing server values", () => {
+  const usage = core.normalizeUsage({ rate_limit: {
+    primary_window: { used_percent: 22.8, limit_window_seconds: 18000, reset_after_seconds: 3600 },
+    secondary_window: { used_percent: 78.5, limit_window_seconds: 604800 }
+  } }, 1700000000000);
+  assert.equal(usage.windows[0].used, 22.8);
+  assert.equal(i18n.windowLabel(usage.windows[0], "ru"), "Сессия · 5 ч");
+  assert.equal(i18n.windowLabel(usage.windows[1], "en"), "Weekly");
+  assert.equal(i18n.formatDuration(16980000, "ru"), "4 ч 43 мин");
+  assert.equal(i18n.formatDuration(16980000, "en"), "4h 43m");
+  assert.equal(i18n.t("ru", "resetsIn", { duration: "4 ч 43 мин" }), "сброс через 4 ч 43 мин");
+  assert.equal(i18n.tokenCount(1, "ru"), "≈ 1 токен");
+  assert.equal(i18n.tokenCount(22, "ru"), "≈ 22 токена");
+  assert.equal(i18n.tokenCount(11, "ru"), "≈ 11 токенов");
+});
+
+test("Chrome extension description has both browser locales", () => {
+  for (const locale of ["en", "ru"]) {
+    const messages = JSON.parse(fs.readFileSync(require.resolve(`../extension/_locales/${locale}/messages.json`), "utf8"));
+    assert.ok(messages.extensionDescription.message.includes("Work / Codex"));
+  }
 });

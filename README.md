@@ -26,7 +26,7 @@ A **Google Chrome extension** (Manifest V3) that adds an approximate token count
 
 ## Install
 
-1. Download `chatgpt-limit-tracker-1.0.2.zip` from the [latest release](https://github.com/azziz-ui/chatgpt-limit-tracker/releases/latest), or build from source below.
+1. Download `chatgpt-limit-tracker-1.0.3.zip` from the [latest release](https://github.com/azziz-ui/chatgpt-limit-tracker/releases/latest), or build from source below.
 2. Extract the ZIP to a permanent folder. Open `chrome://extensions` in Chrome and enable **Developer mode**.
 3. Click **Load unpacked** and choose the extracted `chatgpt-limit-tracker` folder containing `manifest.json`.
 4. Open or reload [chatgpt.com](https://chatgpt.com/).
@@ -42,6 +42,9 @@ If you build from source, select `dist/chatgpt-limit-tracker/`. Do not select th
 | Usage bars | Show the **used percentage** for the shared **Work / Codex** allowance windows from `/backend-api/wham/usage`, when the server provides them. |
 | Reset times | Read from the server. Refreshes once a minute in a visible tab and on demand with `↻`. |
 | Appearance | Works in light and dark themes, including narrow screens. |
+| Languages | Automatically follows ChatGPT's page language (English or Russian). Falls back to the browser language if the page doesn't specify one. Other languages use English. The Chrome extension description follows the browser language. |
+
+The popup uses the same language as the active ChatGPT tab. On other tabs, it uses the browser language. Changing ChatGPT's page language updates the in-chat widgets without a page reload. No language setting is stored by the extension.
 
 The context size is **not detected automatically**. It can vary between products, plans, and modes, even for the same API model. The counter therefore shows a number **without a context-fill bar** by default. If you know the exact size for your setup, you can enable an approximate reference bar under Advanced settings. Don't enter a guessed number just to fill the bar.
 
@@ -69,7 +72,7 @@ npm run test:browser
 npm run package
 ```
 
-The unpacked extension is built to `dist/chatgpt-limit-tracker/`; the installable archive is `chatgpt-limit-tracker-1.0.2.zip`. Browser tests launch a real MV3 extension in an isolated Chromium profile with a test page and controlled API responses. They do not access your conversations. If Chromium is already installed, set `CLT_CHROMIUM` to its executable path. To regenerate the GitHub preview image, run `npm run assets:social`.
+The unpacked extension is built to `dist/chatgpt-limit-tracker/`; the installable archive is `chatgpt-limit-tracker-1.0.3.zip`. Browser tests launch a real MV3 extension in an isolated Chromium profile with a test page and controlled API responses. They do not access your conversations. If Chromium is already installed, set `CLT_CHROMIUM` to its executable path. To regenerate the GitHub preview image, run `npm run assets:social`.
 
 ## Publishing
 
