@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-limit-tracker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "Conversation token counter and native Work / Codex usage bars for ChatGPT",
   "scripts": {

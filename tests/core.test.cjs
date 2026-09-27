@@ -11,13 +11,13 @@ function node(id, parent, role, text, metadata = {}) {
 test("active branch excludes regenerated alternatives and hidden system/analysis messages", () => {
   const snapshot = core.normalizeConversation({ current_node: "b", mapping: {
     root: node("root", null, "system", "secret"),
-    user: node("user", "root", "user", "Привет"),
+    user: node("user", "root", "user", "Hello"),
     hidden: node("hidden", "user", "assistant", "reasoning", { channel: "analysis" }),
     a: node("a", "user", "assistant", "Old answer"),
-    b: node("b", "hidden", "assistant", "Новый ответ")
+    b: node("b", "hidden", "assistant", "New answer")
   } }, "chat");
-  assert.deepEqual(core.activeMessages(snapshot).map((item) => item.text), ["Привет", "Новый ответ"]);
-  assert.deepEqual(core.activeMessages(snapshot, [{ id: "a", role: "assistant", text: "Old answer" }]).map((item) => item.text), ["Привет", "Old answer"]);
+  assert.deepEqual(core.activeMessages(snapshot).map((item) => item.text), ["Hello", "New answer"]);
+  assert.deepEqual(core.activeMessages(snapshot, [{ id: "a", role: "assistant", text: "Old answer" }]).map((item) => item.text), ["Hello", "Old answer"]);
 });
 
 test("partial DOM does not lose history; streaming text replaces the same message", () => {
@@ -65,7 +65,7 @@ test("usage uses server precision, durations and reset timestamps", () => {
   assert.equal(usage.windows[0].used, 22.8);
   assert.equal(usage.windows[0].resetAt, now + 3600000);
   assert.equal(usage.windows[1].resetAt, 1700300000000);
-  assert.equal(usage.windows[1].label, "Неделя");
+  assert.equal(usage.windows[1].label, "Weekly");
 });
 
 test("missing and malformed usage is unknown rather than 0 or 100 percent", () => {
@@ -84,8 +84,8 @@ test("expired windows retain server values; unknown durations are not called fiv
     secondary_window: { used_percent: 10 }
   } }, 2000000);
   assert.equal(usage.windows[0].used, 95);
-  assert.equal(usage.windows[0].label, "Окно · 1 д 0 ч");
-  assert.equal(usage.windows[1].label, "Второе окно");
+  assert.equal(usage.windows[0].label, "Window · 1d 0h");
+  assert.equal(usage.windows[1].label, "Secondary window");
 });
 
 test("settings reject fabricated or invalid limits; conversation IDs support GPT routes", () => {
@@ -98,10 +98,10 @@ test("settings reject fabricated or invalid limits; conversation IDs support GPT
   assert.equal(core.conversationId("/c/a/../../secret"), "a");
 });
 
-test("bundled tokenizer handles Cyrillic, emoji, code and literal special-token strings", () => {
+test("bundled tokenizer handles English text, emoji, code and literal special-token strings", () => {
   const context = vm.createContext({ TextEncoder, TextDecoder });
   vm.runInContext(fs.readFileSync(require.resolve("../dist/chatgpt-limit-tracker/tokenizer.js"), "utf8"), context);
-  for (const input of ["Привет, мир! 👋", "const x = 42;", "<|endoftext|>"]) {
+  for (const input of ["Hello world! 👋", "const x = 42;", "<|endoftext|>"]) {
     const count = context.CLTTokenizer.count(input);
     assert.ok(count > 0 && count <= new TextEncoder().encode(input).length);
   }

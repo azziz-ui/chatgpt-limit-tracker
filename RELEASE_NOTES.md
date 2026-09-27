@@ -1,13 +1,15 @@
-# v1.0.1 — ChatGPT Limit Tracker
+# v1.0.2 — English interface and documentation
 
-Первый публичный выпуск Chrome-расширения.
+All user-facing text is now in English: the extension popup, token and usage labels, status and error messages, screenshots, banner, social preview, and README. The extension's behavior is unchanged.
 
-- Приблизительный счётчик токенов текущей беседы в заголовке ChatGPT.
-- Полосы общей квоты Work / Codex и время сброса под полем ввода.
-- Тёмная и светлая темы, поддержка узкого экрана.
-- Локальная обработка без API-ключа и сторонних серверов.
-- Размер контекста для шкалы — только дополнительная ручная настройка: значение для ChatGPT не угадывается.
+### Included features
 
-**Установка:** скачайте прикреплённый `chatgpt-limit-tracker-1.0.1.zip`, распакуйте его и выберите внутреннюю папку `chatgpt-limit-tracker` в `chrome://extensions` → «Загрузить распакованное расширение» (включив Режим разработчика).
+- Approximate token count for the current conversation branch in the ChatGPT header.
+- Shared Work / Codex usage bars and server-reported reset times below the composer.
+- Light and dark themes, including narrow screens.
+- Local processing with no API key or third-party servers.
+- Optional, manually configured context reference bar (no guessed default).
 
-Полосы показывают **Work / Codex**, не лимиты обычного Chat. Скриншоты в README демонстрационные, значения получены из тестового API. Подробности и ограничения — в README.
+**Install:** download the attached `chatgpt-limit-tracker-1.0.2.zip`, extract it, and select the inner `chatgpt-limit-tracker` folder in `chrome://extensions` → **Load unpacked** (after enabling **Developer mode**).
+
+The usage bars track **Work / Codex**, not the separate limits for regular Chat. README screenshots use simulated API data. See the README for details and limitations.

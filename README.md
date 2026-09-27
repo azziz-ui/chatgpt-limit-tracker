@@ -1,64 +1,64 @@
 <div align="center">
-  <img src="assets/logo.png" width="76" height="76" alt="Логотип ChatGPT Limit Tracker — три синих столбца">
+  <img src="assets/logo.png" width="76" height="76" alt="ChatGPT Limit Tracker logo: three blue bars">
   <h1>ChatGPT Limit Tracker</h1>
-  <p>Токены беседы сверху. Использование Work / Codex под полем ввода.</p>
-  <img src="assets/banner.svg" width="100%" alt="Обложка ChatGPT Limit Tracker со счётчиком токенов и полосами usage">
+  <p>Conversation tokens above the chat. Work / Codex usage below the composer.</p>
+  <img src="assets/banner.svg" width="100%" alt="ChatGPT Limit Tracker banner showing a token counter and usage bars">
 </div>
 
-Расширение для **Google Chrome** (`Manifest V3`) добавляет в интерфейс [chatgpt.com](https://chatgpt.com/) счётчик токенов текущей ветки разговора и полосы серверного usage с временем сброса. Без API-ключа, аналитики и внешних серверов.
+A **Google Chrome extension** (Manifest V3) that adds an approximate token count for your current conversation branch and server-reported usage bars with reset times to [chatgpt.com](https://chatgpt.com/). No API key, analytics, or third-party servers.
 
-> **Важно:** полосы под чатом показывают общую квоту **ChatGPT Work / Codex**, а **не** лимит сообщений обычного Chat. Число токенов — оценка текста беседы, а не точное заполнение контекста модели.
+> **Important:** The bars below the composer show the shared **ChatGPT Work / Codex** allowance, **not** the message limit for regular Chat. The token count estimates conversation text; it is not an exact measure of the model's context usage.
 
-## Как выглядит
+## Preview
 
-![Демо расширения в тёмной теме: токены у заголовка, usage Work / Codex под полем ввода](assets/screenshot-dark.png)
+![Demo of the extension in dark mode: tokens in the header and Work / Codex usage under the composer](assets/screenshot-dark.png)
 
 <details>
-<summary>Светлая тема и узкий экран</summary>
+<summary>Light mode and narrow screen</summary>
 
-| Светлая тема | Узкий экран |
+| Light mode | Narrow screen |
 | --- | --- |
-| ![Демо в светлой теме](assets/screenshot-light.png) | ![Демо на узком экране](assets/screenshot-mobile.png) |
+| ![Demo in light mode](assets/screenshot-light.png) | ![Demo on a narrow screen](assets/screenshot-mobile.png) |
 
 </details>
 
-*Скриншоты сделаны на тестовой странице с демонстрационными ответами API. Они показывают интерфейс расширения, а не данные реального аккаунта.*
+*Screenshots were captured on a test page with simulated API responses. They show the extension's interface, not a real account's usage.*
 
-## Установка
+## Install
 
-1. Скачайте `chatgpt-limit-tracker-1.0.1.zip` из раздела **Releases** этого репозитория (после публикации релиза) или соберите проект по инструкции ниже.
-2. Распакуйте ZIP в постоянную папку. Откройте в Chrome `chrome://extensions` и включите **Режим разработчика**.
-3. Нажмите **Загрузить распакованное расширение** и выберите папку `chatgpt-limit-tracker`, в которой находится `manifest.json`.
-4. Откройте или перезагрузите [chatgpt.com](https://chatgpt.com/).
+1. Download `chatgpt-limit-tracker-1.0.2.zip` from the [latest release](https://github.com/azziz-ui/chatgpt-limit-tracker/releases/latest), or build from source below.
+2. Extract the ZIP to a permanent folder. Open `chrome://extensions` in Chrome and enable **Developer mode**.
+3. Click **Load unpacked** and choose the extracted `chatgpt-limit-tracker` folder containing `manifest.json`.
+4. Open or reload [chatgpt.com](https://chatgpt.com/).
 
-Не выбирайте папку `extension/` из исходников: в ней ещё нет собранного токенизатора и иконок. После `npm run build` выбирайте `dist/chatgpt-limit-tracker/`.
+If you build from source, select `dist/chatgpt-limit-tracker/`. Do not select the source `extension/` folder: it does not contain the bundled tokenizer or generated icons.
 
-## Возможности и ограничения
+## Features and limitations
 
-| Возможность | Как работает |
+| Feature | Details |
 | --- | --- |
-| Счётчик токенов | Считает текст текущей ветки разговора с помощью локального `gpt-tokenizer` (`o200k_base`). Обновляется во время генерации. |
-| История беседы | Читает текущий разговор через внутренний API ChatGPT; если он недоступен, считает только загруженные на странице сообщения. |
-| Две полосы usage | Показывают **использованный** процент окон общей квоты **Work / Codex** из `/backend-api/wham/usage`, если сервер передал эти данные. |
-| Время сброса | Берётся из ответа сервера; обновление раз в минуту и вручную по кнопке `↻`. |
-| Темы | Светлая и тёмная, в том числе на узком экране. |
+| Token counter | Counts text in the current conversation branch with a locally bundled `gpt-tokenizer` (`o200k_base`). Updates as a response is generated. |
+| Conversation history | Reads the current conversation through ChatGPT's internal API. If unavailable, falls back to messages loaded on the page. |
+| Usage bars | Show the **used percentage** for the shared **Work / Codex** allowance windows from `/backend-api/wham/usage`, when the server provides them. |
+| Reset times | Read from the server. Refreshes once a minute in a visible tab and on demand with `↻`. |
+| Appearance | Works in light and dark themes, including narrow screens. |
 
-Размер контекста **не определяется автоматически**: для конкретных тарифа, режима и продукта он может отличаться от заявленного для модели в API. Поэтому по умолчанию отображается только число токенов, **без шкалы заполнения**. Если вам точно известен размер контекста, в дополнительных настройках можно включить ориентировочную шкалу вручную. Не стоит ставить примерное число лишь ради полоски.
+The context size is **not detected automatically**. It can vary between products, plans, and modes, even for the same API model. The counter therefore shows a number **without a context-fill bar** by default. If you know the exact size for your setup, you can enable an approximate reference bar under Advanced settings. Don't enter a guessed number just to fill the bar.
 
-Счётчик не включает скрытые инструкции, reasoning, содержимое файлов и изображений, серверное сокращение истории и служебные токены. Токенизация модели тоже может отличаться. Таймера кэша, как в Claude Counter, нет: доступных надёжных данных для него ChatGPT не предоставляет.
+The token estimate excludes hidden instructions, reasoning, file and image contents, server-side history compaction, and request-formatting overhead. The model's tokenizer may also differ. There is no Claude-style cache timer because ChatGPT does not expose reliable data for one.
 
-Если сервер не передаёт usage, расширение показывает **«нет данных»**, а не придумывает проценты. При ошибке обновления ранее полученные значения помечаются устаревшими. Внутренний API и DOM ChatGPT могут измениться без предупреждения. Встроенное приложение ChatGPT расширения Chrome не поддерживает.
+If the server does not provide usage, the extension shows **“no data”**, not a made-up percentage. Previously fetched readings are explicitly marked stale after a refresh error. ChatGPT's internal API and page structure can change without notice. Chrome extensions do not run inside the ChatGPT desktop app.
 
-## Приватность
+## Privacy
 
-- Расширение работает только на `chatgpt.com`; единственное разрешение — `storage` для вашей настройки шкалы.
-- История чатов, авторизационные токены и usage **не записываются** в хранилище расширения и не уходят на сторонние серверы.
-- Запросы к внутреннему API выполняются от имени вашей текущей сессии только на `chatgpt.com`. Запрашивается текущий разговор, не весь список чатов.
-- Нет аналитики, удалённого кода или требования вводить API-ключ.
+- Scripts run only on `chatgpt.com`; the only extension permission is `storage` for your reference-bar setting.
+- Conversations, authentication tokens, and usage are **not saved** to extension storage or sent to third-party servers.
+- Requests to ChatGPT's internal API use your current session and stay on `chatgpt.com`. Only the current conversation is requested, not your complete chat list.
+- No analytics, remote code, or API-key entry.
 
-## Разработка
+## Development
 
-Требуется Node.js 20+.
+Requires Node.js 20+.
 
 ```sh
 npm ci
@@ -69,14 +69,12 @@ npm run test:browser
 npm run package
 ```
 
-Готовое расширение находится в `dist/chatgpt-limit-tracker/`, архив — в `chatgpt-limit-tracker-1.0.1.zip`. `npm run test:browser` запускает настоящее MV3-расширение в отдельном Chromium с тестовой страницей и контролируемыми ответами API — ваша переписка не используется. Для уже установленного Chromium можно указать путь через `CLT_CHROMIUM`.
+The unpacked extension is built to `dist/chatgpt-limit-tracker/`; the installable archive is `chatgpt-limit-tracker-1.0.2.zip`. Browser tests launch a real MV3 extension in an isolated Chromium profile with a test page and controlled API responses. They do not access your conversations. If Chromium is already installed, set `CLT_CHROMIUM` to its executable path. To regenerate the GitHub preview image, run `npm run assets:social`.
 
-## Подготовка публикации
+## Publishing
 
-Исходники и изображения `assets/` можно разместить на GitHub как обычный репозиторий. Архив для установки загрузите во вкладке **Releases → Draft a new release** как файл `chatgpt-limit-tracker-1.0.1.zip`, тег `v1.0.1`. GitHub автоматически покажет обложку и скриншоты в README. Для карточки репозитория **Settings → General → Social preview** можно загрузить `assets/social-preview.png`. Не загружайте `node_modules/`, `dist/` и `artifacts/` в историю репозитория; они исключены через `.gitignore`.
+The GitHub release includes the installable ZIP. The logo, banner, demo screenshots, and [GitHub social preview](assets/social-preview.png) are in `assets/`. Upload `assets/social-preview.png` under **Settings → General → Social preview** if you want the repository link to display a custom share card. Build output (`dist/`), test screenshots (`artifacts/`), and dependencies (`node_modules/`) are intentionally ignored by Git.
 
-Для карточки репозитория: **About** → описание `Token counter for ChatGPT conversations and Work / Codex usage bars` и темы `chatgpt`, `chrome-extension`, `token-counter`, `usage-tracker`, `manifest-v3`.
+## License
 
-## Лицензия
-
-[MIT](LICENSE). Дизайн вдохновлён [Claude Counter](https://github.com/she-llac/claude-counter); реализация написана отдельно. Лицензия включённого `gpt-tokenizer` поставляется в `THIRD_PARTY_NOTICES.txt` внутри архива.
+[MIT](LICENSE). Inspired by [Claude Counter](https://github.com/she-llac/claude-counter); this implementation is separate. The bundled `gpt-tokenizer` license is included as `THIRD_PARTY_NOTICES.txt` in the release archive.

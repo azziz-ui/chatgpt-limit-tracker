@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-labelledby="title">
-  <title id="title">ChatGPT Limit Tracker — три полосы использования</title>
+  <title id="title">ChatGPT Limit Tracker — three usage bars</title>
   <rect x="23" y="23" width="82" height="82" rx="22" fill="#24272b"/>
   <path d="M27 66h20v31H27zM54 32h20v65H54zM81 48h20v49H81z" fill="#328bde"/>
   <path d="M27 66h20v3H27zM54 32h20v3H54zM81 48h20v3H81z" fill="#cfe7ff"/>

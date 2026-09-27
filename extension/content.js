@@ -16,7 +16,7 @@
     streaming: false
   };
   const countCache = new Map();
-  const number = new Intl.NumberFormat("ru-RU");
+  const number = new Intl.NumberFormat("en-US");
   let scheduled = false;
   let lastResetRefresh = 0;
   let lastGenerationRefresh = 0;
@@ -95,18 +95,18 @@
   const usage = widget("clt-usage");
   usage.host.style.cssText = "display:block;width:100%;flex:0 0 100%;grid-column:1/-1;padding:0 14px 5px;box-sizing:border-box;";
   const usageBox = element("section", "usage");
-  usageBox.setAttribute("aria-label", "Использование Work / Codex");
+  usageBox.setAttribute("aria-label", "Work / Codex usage");
   const windows = element("div", "windows");
   const emptyState = element("div", "empty-state");
   const footer = element("div", "footer");
   const source = element("span", "source", "Work / Codex");
-  source.title = "Общая квота Work / Codex из ChatGPT. Это не лимит сообщений обычного Chat.";
+  source.title = "Shared Work / Codex allowance from ChatGPT. This is not the message limit for regular Chat.";
   const dot = element("span", "dot");
   const statusLabel = element("span", "status");
   const refresh = element("button", "refresh", "↻");
   refresh.type = "button";
-  refresh.title = "Обновить usage";
-  refresh.setAttribute("aria-label", "Обновить usage");
+  refresh.title = "Refresh usage";
+  refresh.setAttribute("aria-label", "Refresh usage");
   refresh.addEventListener("click", () => send("refresh"));
   footer.append(source, dot, statusLabel, refresh);
   usageBox.append(windows, emptyState, footer);
@@ -186,21 +186,21 @@
     tokenTrack.hidden = !limit;
     if (limit) setFill(tokenFill, state.tokens / limit * 100);
     tokenRow.title = [
-      "Приблизительное число токенов текста текущей ветки беседы (o200k_base).",
-      state.source === "api" ? "История получена из ChatGPT; текущий ответ обновляется со страницы."
-        : "Сейчас считаются только сообщения, загруженные на странице.",
-      "Не включает скрытые инструкции, reasoning и содержимое файлов/изображений. Не показывает фактический размер контекста модели.",
-      limit ? `Шкала относительно заданного вами размера: ${number.format(limit)} токенов.`
-        : "Для шкалы задайте размер контекста в настройках расширения."
+      "Approximate text token count for the current conversation branch (o200k_base).",
+      state.source === "api" ? "History loaded from ChatGPT; the current response updates from the page."
+        : "Only messages currently loaded on the page are counted.",
+      "Excludes hidden instructions, reasoning, and file/image contents. This is not the model's actual context usage.",
+      limit ? `Bar uses your manually entered reference: ${number.format(limit)} tokens.`
+        : "To show a reference bar, enter a context size in the extension settings."
     ].join("\n");
   }
 
   function errorText(code) {
-    if (code === "signed-out" || code === "http-401") return "Войдите в ChatGPT и нажмите ↻";
-    if (code === "http-403") return "ChatGPT не разрешил доступ к usage";
-    if (code === "http-429") return "Слишком много запросов — попробуйте позже";
-    if (code === "unsupported" || code === "http-404") return "ChatGPT не передал данные этой квоты";
-    return "Не удалось загрузить usage · нажмите ↻";
+    if (code === "signed-out" || code === "http-401") return "Sign in to ChatGPT and press ↻";
+    if (code === "http-403") return "ChatGPT denied access to usage";
+    if (code === "http-429") return "Too many requests — try again later";
+    if (code === "unsupported" || code === "http-404") return "ChatGPT did not provide quota data";
+    return "Could not load usage · press ↻";
   }
 
   function renderUsage() {
@@ -210,7 +210,7 @@
     windows.replaceChildren();
     windows.hidden = !data;
     emptyState.hidden = Boolean(data);
-    emptyState.textContent = state.status === "loading" ? "Загрузка usage…" : "Usage: нет данных";
+    emptyState.textContent = state.status === "loading" ? "Loading usage…" : "Usage: no data";
     source.textContent = data?.plan ? `Work / Codex · ${data.plan}` : "Work / Codex";
     let expired = false;
     if (data) {
@@ -223,29 +223,29 @@
         label.append(percent);
         const passed = item.resetAt !== null && item.resetAt <= now;
         expired ||= passed;
-        const reset = element("span", "reset", item.resetAt === null ? "сброс неизвестен"
-          : passed ? "ожидаем сброс" : `через ${core.formatDuration(item.resetAt - now)}`);
+        const reset = element("span", "reset", item.resetAt === null ? "reset unknown"
+          : passed ? "awaiting reset" : `resets in ${core.formatDuration(item.resetAt - now)}`);
         const track = element("span", `track${item.used === null ? " unknown" : ""}`);
         track.setAttribute("role", "progressbar");
-        track.setAttribute("aria-label", `${item.label}: использовано`);
+        track.setAttribute("aria-label", `${item.label}: used`);
         track.setAttribute("aria-valuemin", "0");
         track.setAttribute("aria-valuemax", "100");
         if (item.used !== null) track.setAttribute("aria-valuenow", String(Math.min(100, item.used)));
         const fill = element("span", "fill");
         setFill(fill, item.used ?? 0);
         track.append(fill);
-        windowBox.title = `${item.used === null ? "Процент не передан" : `Использовано ${item.used}%`}. Остаток — общая квота Work / Codex.`
-          + (item.resetAt ? `\nСброс: ${new Date(item.resetAt).toLocaleString("ru-RU")}` : "");
+        windowBox.title = `${item.used === null ? "Percentage not provided" : `${item.used}% used`}. Shared Work / Codex allowance.`
+          + (item.resetAt ? `\nResets: ${new Date(item.resetAt).toLocaleString("en-US")}` : "");
         line.append(label, reset);
         windowBox.append(line, track);
         windows.append(windowBox);
       }
     }
     const stale = data && now - data.fetchedAt > 180000;
-    statusLabel.textContent = state.status === "loading" ? "обновление…"
-      : state.status === "error" ? (data ? "старые данные · ошибка обновления" : errorText(state.error))
-        : expired ? "ожидаем данные после сброса" : stale ? "данные устарели · нажмите ↻" : "использовано · данные ChatGPT";
-    statusLabel.title = data ? `Последнее обновление: ${new Date(data.fetchedAt).toLocaleTimeString("ru-RU")}` : errorText(state.error);
+    statusLabel.textContent = state.status === "loading" ? "refreshing…"
+      : state.status === "error" ? (data ? "stale data · refresh failed" : errorText(state.error))
+        : expired ? "waiting for updated data" : stale ? "stale data · press ↻" : "used · ChatGPT data";
+    statusLabel.title = data ? `Last updated: ${new Date(data.fetchedAt).toLocaleTimeString("en-US")}` : errorText(state.error);
     dot.style.opacity = stale || state.status === "error" ? ".35" : "1";
     if (expired && document.visibilityState === "visible" && now - lastResetRefresh > 60000) {
       lastResetRefresh = now;

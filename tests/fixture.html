@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" class="dark">
+<html lang="en" class="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,40 +30,42 @@
     .disclaimer { margin-top:9px; text-align:center; font-size:11px; color:var(--muted); }
     @media(max-width:560px) { header { padding:0 10px; gap:4px; height:60px; } .side { display:none; }
       .model { font-size:15px; white-space:nowrap; } .share { padding:5px 10px; font-size:11px; }
-      main { margin-top:24px; padding:0 18px; font-size:14px; } #composer-area { width:calc(100% - 24px); } }
+      main { margin-top:16px; padding:0 18px; font-size:14px; } .answer { padding-top:18px; }
+      main p { margin-bottom:12px; } main h2 { margin:18px 0 8px; }
+      #composer-area { width:calc(100% - 24px); } }
   </style>
 </head>
 <body>
   <header id="page-header">
-    <button class="side" aria-label="Боковая панель">◫</button>
+    <button class="side" aria-label="Sidebar">◫</button>
     <button class="model" data-testid="model-switcher-dropdown-button">ChatGPT <span class="chevron">⌄</span></button>
-    <button class="share">Поделиться</button>
+    <button class="share">Share</button>
   </header>
   <main>
-    <div class="user" data-message-author-role="user" data-message-id="u1"><div class="whitespace-pre-wrap">Почему useEffect запускается дважды?</div></div>
+    <div class="user" data-message-author-role="user" data-message-id="u1"><div class="whitespace-pre-wrap">Why does useEffect run twice?</div></div>
     <div class="answer" data-message-author-role="assistant" data-message-id="a1">
       <div class="markdown">
-        <p>Скорее всего, в приложении включён <strong>React Strict Mode</strong>. В режиме разработки React дополнительно запускает эффект и его очистку, чтобы обнаружить ошибки.</p>
-        <h2>Добавь функцию очистки</h2>
-        <p>Если эффект создаёт подписку, таймер или соединение, освобождай ресурс при очистке:</p>
+        <p>Most likely, <strong>React Strict Mode</strong> is enabled. In development, React runs an extra effect and cleanup cycle to help reveal bugs.</p>
+        <h2>Add a cleanup function</h2>
+        <p>If the effect creates a subscription, timer, or connection, release it in the cleanup:</p>
         <pre><code><span class="keyword">useEffect</span>(() =&gt; {
   <span class="keyword">const</span> connection = createConnection();
   connection.connect();
 
-  <span class="comment">// Вызывается при очистке эффекта</span>
+  <span class="comment">// Called when the effect is cleaned up</span>
   <span class="keyword">return</span> () =&gt; connection.disconnect();
 }, []);</code></pre>
-        <p>В production этой дополнительной проверки нет. Отключать Strict Mode ради неё обычно не нужно.</p>
+        <p>That extra check doesn't happen in production. You usually don't need to disable Strict Mode because of it.</p>
       </div>
     </div>
     <div class="actions">♧ ♫ ↻ ⋯</div>
   </main>
   <div id="composer-area">
     <form>
-      <div id="prompt-textarea" contenteditable="true" role="textbox" aria-label="Сообщение">Спросите что-нибудь</div>
-      <div class="controls"><button type="button" class="tool">+</button><button type="button" class="send" aria-label="Отправить">↑</button></div>
+      <div id="prompt-textarea" contenteditable="true" role="textbox" aria-label="Message">Ask anything</div>
+      <div class="controls"><button type="button" class="tool">+</button><button type="button" class="send" aria-label="Send">↑</button></div>
     </form>
-    <div class="disclaimer">Тестовый макет ChatGPT · демонстрационные данные расширения</div>
+    <div class="disclaimer">ChatGPT test mockup · simulated extension data</div>
   </div>
 </body>
 </html>

@@ -54,9 +54,9 @@ await browser.route("https://chatgpt.com/**", async (route) => {
     } });
   }
   if (url.pathname === "/backend-api/conversation/demo") return json({ conversation_id: "demo", current_node: "a1", mapping: {
-    history: makeNode("history", null, "user", "В предыдущей части обсуждали состояние, эффекты и обработку событий React. ".repeat(950)),
-    u1: makeNode("u1", "history", "user", "Почему useEffect запускается дважды?"),
-    a1: makeNode("a1", "u1", "assistant", "Скорее всего, в приложении включён React Strict Mode.")
+    history: makeNode("history", null, "user", "Earlier in this conversation we discussed React state, effects, and event handling. ".repeat(800)),
+    u1: makeNode("u1", "history", "user", "Why does useEffect run twice?"),
+    a1: makeNode("a1", "u1", "assistant", "Most likely, React Strict Mode is enabled.")
   } });
   if (url.pathname === "/backend-api/conversation/second") return json({ conversation_id: "second", current_node: "u2", mapping: {
     u2: makeNode("u2", null, "user", "hello")
@@ -70,8 +70,8 @@ try {
   const page = await browser.newPage();
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("https://chatgpt.com/c/demo");
-  await page.waitForFunction(() => document.querySelector("#clt-usage")?.shadowRoot.textContent.includes("22,8%"));
-  await page.waitForFunction(() => document.querySelector("#clt-tokens")?.shadowRoot.querySelector(".tokens")?.title.includes("История получена"));
+  await page.waitForFunction(() => document.querySelector("#clt-usage")?.shadowRoot.textContent.includes("22.8%"));
+  await page.waitForFunction(() => document.querySelector("#clt-tokens")?.shadowRoot.querySelector(".tokens")?.title.includes("History loaded"));
   assert.equal(await page.locator("#clt-usage").count(), 1);
   assert.equal(await page.locator("#clt-tokens").count(), 1);
   assert.equal(await page.locator("form #clt-usage").count(), 1);
@@ -120,7 +120,7 @@ try {
   console.log("PASS: dark/light themes and 390px viewport");
 
   await page.evaluate(() => {
-    document.querySelector('[data-message-id="a1"] .markdown').append(" Дополнительный ответ ".repeat(200));
+    document.querySelector('[data-message-id="a1"] .markdown').append(" Additional answer ".repeat(200));
   });
   await page.waitForFunction((before) => document.querySelector("#clt-tokens").shadowRoot.querySelector(".tokens").innerText !== before, initialTokens);
   console.log("PASS: live response updates token count");
@@ -146,8 +146,8 @@ try {
   await page.waitForTimeout(5100);
   mode = "forbidden";
   await page.locator("#clt-usage .refresh").click();
-  await page.waitForFunction(() => document.querySelector("#clt-usage").shadowRoot.textContent.includes("старые данные"));
-  assert.ok((await page.locator("#clt-usage .windows").innerText()).includes("22,8%"));
+  await page.waitForFunction(() => document.querySelector("#clt-usage").shadowRoot.textContent.includes("stale data"));
+  assert.ok((await page.locator("#clt-usage .windows").innerText()).includes("22.8%"));
   console.log("PASS: API errors preserve explicitly stale readings");
 
   mode = "ok";
@@ -171,7 +171,7 @@ try {
 
   mode = "unsupported";
   await page.reload();
-  await page.waitForFunction(() => document.querySelector("#clt-usage")?.shadowRoot.textContent.includes("не передал данные"));
+  await page.waitForFunction(() => document.querySelector("#clt-usage")?.shadowRoot.textContent.includes("did not provide quota data"));
   assert.equal(await page.locator("#clt-usage .percent").count(), 0);
   console.log("PASS: unsupported API shows no fabricated percentage");
   assert.deepEqual(errors, []);

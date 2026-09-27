@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,33 +9,33 @@
 <body>
   <header>
     <img src="icons/48.png" width="32" height="32" alt="">
-    <div><h1>Limit Tracker</h1><p>для ChatGPT</p></div>
-    <span class="version">1.0.1</span>
+    <div><h1>Limit Tracker</h1><p>for ChatGPT</p></div>
+    <span class="version">1.0.2</span>
   </header>
   <main>
     <section>
-      <h2>Токены беседы</h2>
-      <p>Счётчик наверху учитывает текст текущей ветки. Скрытые инструкции, reasoning и вложения не входят в оценку.</p>
-      <p class="hint">По умолчанию только число токенов: ChatGPT не сообщает достоверный размер контекста для шкалы.</p>
+      <h2>Conversation tokens</h2>
+      <p>The counter above the chat estimates text tokens in the current conversation branch. Hidden instructions, reasoning, and attachments are excluded.</p>
+      <p class="hint">By default, only the number is shown: ChatGPT does not provide a reliable context size for the bar.</p>
       <details>
-        <summary>Дополнительная настройка · шкала</summary>
-        <label for="context-limit">Размер контекста вручную</label>
+        <summary>Advanced · reference bar</summary>
+        <label for="context-limit">Enter context size manually</label>
         <div class="input-row">
-          <input id="context-limit" type="number" min="1024" max="10000000" step="1" placeholder="Без шкалы" aria-describedby="context-help">
+          <input id="context-limit" type="number" min="1024" max="10000000" step="1" placeholder="No bar" aria-describedby="context-help">
           <span>tokens</span>
         </div>
-        <p id="context-help" class="hint">Только если вы знаете точное значение для своего режима. Окно модели в API может отличаться от доступного в ChatGPT. Пустое поле отключает шкалу.</p>
-        <button id="save" class="primary" type="button">Сохранить</button>
+        <p id="context-help" class="hint">Only use this if you know the size for your plan and mode. An API model's context window may differ from ChatGPT's. Leave blank to hide the bar.</p>
+        <button id="save" class="primary" type="button">Save</button>
       </details>
     </section>
     <section>
-      <h2>Usage под полем ввода</h2>
-      <p>Реальные проценты и сброс общей квоты <strong>Work / Codex</strong> из ChatGPT. Они не отражают отдельные лимиты обычного Chat.</p>
-      <button id="refresh" class="secondary" type="button">Обновить usage на вкладке</button>
+      <h2>Usage below the composer</h2>
+      <p>Server-reported usage and reset times for the shared <strong>Work / Codex</strong> allowance. These are not the separate limits for regular Chat.</p>
+      <button id="refresh" class="secondary" type="button">Refresh usage on this tab</button>
     </section>
     <p id="feedback" role="status" aria-live="polite"></p>
   </main>
-  <footer>Локальная обработка · без API-ключа</footer>
+  <footer>Processed locally · no API key required</footer>
   <script src="core.js"></script>
   <script src="popup.js"></script>
 </body>

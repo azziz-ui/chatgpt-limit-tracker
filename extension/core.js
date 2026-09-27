@@ -120,9 +120,9 @@
     const resetAt = resetTime(raw, now);
     if (used === null && resetAt === null) return null;
     const seconds = isNumber(raw.limit_window_seconds) ? raw.limit_window_seconds : null;
-    const label = seconds === 18000 ? "Сессия · 5 ч" : seconds === 604800 ? "Неделя"
-      : seconds ? `Окно · ${formatDuration(seconds * 1000)}`
-        : id === "primary" ? "Основное окно" : "Второе окно";
+    const label = seconds === 18000 ? "Session · 5h" : seconds === 604800 ? "Weekly"
+      : seconds ? `Window · ${formatDuration(seconds * 1000)}`
+        : id === "primary" ? "Primary window" : "Secondary window";
     return { id, label, used, resetAt, seconds };
   }
 
@@ -142,13 +142,13 @@
   }
 
   function formatDuration(ms) {
-    if (!isNumber(ms) || ms <= 0) return "0 мин";
+    if (!isNumber(ms) || ms <= 0) return "0m";
     const minutes = Math.ceil(ms / 60000);
     const days = Math.floor(minutes / 1440);
     const hours = Math.floor((minutes % 1440) / 60);
-    if (days) return `${days} д ${hours} ч`;
-    if (hours) return `${hours} ч ${minutes % 60} мин`;
-    return `${minutes} мин`;
+    if (days) return `${days}d ${hours}h`;
+    if (hours) return `${hours}h ${minutes % 60}m`;
+    return `${minutes}m`;
   }
 
   function sanitizeSettings(raw) {
