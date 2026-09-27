@@ -1,0 +1,35 @@
+:root { color-scheme:light dark; font:13px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --bg:#fafafa; --text:#282828; --muted:#757575; --line:#dedede; --field:#fff; }
+@media (prefers-color-scheme:dark) { :root { --bg:#232323; --text:#ecece9; --muted:#aaa9a4; --line:#414141; --field:#2c2c2c; } }
+* { box-sizing:border-box; }
+body { width:350px; margin:0; background:var(--bg); color:var(--text); }
+header { display:flex; align-items:center; gap:11px; padding:20px 22px; border-bottom:1px solid var(--line); }
+h1 { font-size:16px; margin:0; font-weight:600; letter-spacing:-.3px; }
+header p { margin:0; font-size:11px; color:var(--muted); }
+.version { margin-left:auto; padding:2px 7px; border:1px solid var(--line); border-radius:5px; color:var(--muted); font-size:10px; }
+main { padding:0 22px; }
+section { padding:17px 0; }
+section + section { border-top:1px solid var(--line); }
+h2 { margin:0 0 6px; font-size:13px; font-weight:600; }
+p { margin:0 0 12px; color:var(--muted); }
+strong { color:var(--text); font-weight:500; }
+label { display:block; margin-bottom:6px; font-size:12px; }
+.input-row { position:relative; }
+.input-row span { position:absolute; top:9px; right:13px; color:var(--muted); font-size:12px; pointer-events:none; }
+input { width:100%; padding:9px 70px 9px 11px; border:1px solid var(--line); border-radius:7px;
+  background:var(--field); color:var(--text); font:inherit; appearance:textfield; }
+input::-webkit-inner-spin-button { appearance:none; }
+.hint { margin-top:7px; font-size:11px; line-height:1.5; }
+details { margin-top:12px; padding:11px 12px; border:1px solid var(--line); border-radius:8px; }
+summary { cursor:pointer; color:var(--text); font-size:12px; font-weight:500; }
+summary:focus-visible { outline:2px solid #328bde; outline-offset:2px; }
+details label { margin-top:14px; }
+details .hint { margin-bottom:12px; }
+button { width:100%; padding:9px 12px; border:0; border-radius:7px; font:inherit; font-weight:500; cursor:pointer; }
+.primary { color:#fff; background:#267dcc; }
+.primary:hover { background:#328bde; }
+.secondary { background:var(--field); color:var(--text); border:1px solid var(--line); }
+.secondary:hover { border-color:var(--muted); }
+button:focus-visible,input:focus-visible { outline:2px solid #328bde; outline-offset:2px; }
+#feedback { min-height:19px; margin:0 0 10px; font-size:11px; }
+footer { padding:12px; border-top:1px solid var(--line); text-align:center; font-size:10px; color:var(--muted); }

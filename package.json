@@ -1,0 +1,19 @@
+{
+  "name": "chatgpt-limit-tracker",
+  "version": "1.0.1",
+  "private": true,
+  "description": "Conversation token counter and native Work / Codex usage bars for ChatGPT",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/core.test.cjs",
+    "test:browser": "node tests/browser.mjs",
+    "assets:social": "node scripts/render-social.mjs",
+    "package": "node scripts/package.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10",
+    "fflate": "0.8.3",
+    "gpt-tokenizer": "3.4.0",
+    "playwright": "1.56.1"
+  }
+}

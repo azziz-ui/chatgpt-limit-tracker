@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChatGPT Limit Tracker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="icons/48.png" width="32" height="32" alt="">
+    <div><h1>Limit Tracker</h1><p>для ChatGPT</p></div>
+    <span class="version">1.0.1</span>
+  </header>
+  <main>
+    <section>
+      <h2>Токены беседы</h2>
+      <p>Счётчик наверху учитывает текст текущей ветки. Скрытые инструкции, reasoning и вложения не входят в оценку.</p>
+      <p class="hint">По умолчанию только число токенов: ChatGPT не сообщает достоверный размер контекста для шкалы.</p>
+      <details>
+        <summary>Дополнительная настройка · шкала</summary>
+        <label for="context-limit">Размер контекста вручную</label>
+        <div class="input-row">
+          <input id="context-limit" type="number" min="1024" max="10000000" step="1" placeholder="Без шкалы" aria-describedby="context-help">
+          <span>tokens</span>
+        </div>
+        <p id="context-help" class="hint">Только если вы знаете точное значение для своего режима. Окно модели в API может отличаться от доступного в ChatGPT. Пустое поле отключает шкалу.</p>
+        <button id="save" class="primary" type="button">Сохранить</button>
+      </details>
+    </section>
+    <section>
+      <h2>Usage под полем ввода</h2>
+      <p>Реальные проценты и сброс общей квоты <strong>Work / Codex</strong> из ChatGPT. Они не отражают отдельные лимиты обычного Chat.</p>
+      <button id="refresh" class="secondary" type="button">Обновить usage на вкладке</button>
+    </section>
+    <p id="feedback" role="status" aria-live="polite"></p>
+  </main>
+  <footer>Локальная обработка · без API-ключа</footer>
+  <script src="core.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

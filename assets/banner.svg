@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">ChatGPT Limit Tracker</title>
+  <desc id="desc">Обложка расширения: логотип с тремя синими столбцами, счётчик токенов и полосы usage.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#161a20"/>
+      <stop offset="1" stop-color="#222a35"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" x2="1" y1="0" y2="0">
+      <stop stop-color="#328bde"/>
+      <stop offset="1" stop-color="#71bfff"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#328bde" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#328bde" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#b5d7f6" stroke-opacity=".035"/>
+    </pattern>
+    <clipPath id="frame"><rect width="1200" height="360" rx="26"/></clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <rect width="1200" height="360" fill="url(#bg)"/>
+    <rect width="1200" height="360" fill="url(#grid)"/>
+    <ellipse cx="1085" cy="175" rx="335" ry="290" fill="#328bde" opacity=".065"/>
+    <path d="M0 0h680v360H0" fill="url(#glow)" opacity=".55"/>
+
+    <rect x="64" y="74" width="94" height="94" rx="26" fill="#24272b" stroke="#6a9bc3" stroke-opacity=".4"/>
+    <path d="M77 119h19v33H77zm25-29h19v62h-19zm25 15h19v47h-19z" fill="#328bde"/>
+    <path d="M77 119h19v3H77zm25-29h19v3h-19zm25 15h19v3h-19z" fill="#cfe7ff"/>
+
+    <text x="185" y="112" fill="#f3f6fa" font-family="Arial,Helvetica,sans-serif" font-size="39" font-weight="700" letter-spacing="-.8">ChatGPT</text>
+    <text x="185" y="155" fill="#f3f6fa" font-family="Arial,Helvetica,sans-serif" font-size="39" font-weight="700" letter-spacing="-.8">Limit Tracker</text>
+    <text x="67" y="230" fill="#c5d0dd" font-family="Arial,Helvetica,sans-serif" font-size="20">Токены беседы сверху · usage Work / Codex снизу</text>
+    <rect x="64" y="272" width="128" height="32" rx="16" fill="#328bde" fill-opacity=".16" stroke="#328bde" stroke-opacity=".32"/>
+    <text x="88" y="293" fill="#a7d5ff" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700">CHROME MV3</text>
+    <rect x="203" y="272" width="151" height="32" rx="16" fill="#ffffff" fill-opacity=".055" stroke="#ffffff" stroke-opacity=".10"/>
+    <text x="226" y="293" fill="#cbd6e2" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700">OPEN SOURCE</text>
+
+    <rect x="776" y="57" width="377" height="245" rx="21" fill="#171b22" stroke="#89b9e0" stroke-opacity=".24"/>
+    <path d="M797 104h335" stroke="#ffffff" stroke-opacity=".09"/>
+    <rect x="800" y="78" width="8" height="12" rx="2" fill="#328bde"/>
+    <rect x="814" y="73" width="8" height="17" rx="2" fill="#328bde"/>
+    <rect x="828" y="68" width="8" height="22" rx="2" fill="#328bde"/>
+    <text x="847" y="87" fill="#e5ebf1" font-family="Arial,Helvetica,sans-serif" font-size="15">≈ tokens / current chat</text>
+    <text x="799" y="143" fill="#95a7bb" font-family="Arial,Helvetica,sans-serif" font-size="12" letter-spacing="1">WORK / CODEX</text>
+    <text x="799" y="178" fill="#e5ebf1" font-family="Arial,Helvetica,sans-serif" font-size="15">Сессия · 5 ч</text>
+    <rect x="799" y="190" width="329" height="8" rx="4" fill="#48525d"/>
+    <rect x="799" y="190" width="106" height="8" rx="4" fill="url(#blue)"/>
+    <text x="799" y="233" fill="#e5ebf1" font-family="Arial,Helvetica,sans-serif" font-size="15">Неделя</text>
+    <rect x="799" y="246" width="329" height="8" rx="4" fill="#48525d"/>
+    <rect x="799" y="246" width="226" height="8" rx="4" fill="url(#blue)"/>
+    <text x="800" y="280" fill="#8ca2b7" font-family="Arial,Helvetica,sans-serif" font-size="11">Локальная обработка · без API-ключа</text>
+  </g>
+</svg>

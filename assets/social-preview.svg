@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">ChatGPT Limit Tracker — GitHub social preview</title>
+  <desc id="desc">Тёмная карточка с логотипом из трёх столбцов и графическим изображением токенов и usage.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#161a20"/><stop offset="1" stop-color="#253141"/></linearGradient>
+    <linearGradient id="bar"><stop stop-color="#328bde"/><stop offset="1" stop-color="#81c7ff"/></linearGradient>
+    <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M44 0H0V44" fill="none" stroke="#acd5fa" stroke-opacity=".05"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <circle cx="1084" cy="92" r="290" fill="#328bde" opacity=".07"/>
+
+  <rect x="74" y="112" width="128" height="128" rx="35" fill="#24272b" stroke="#7daed7" stroke-opacity=".5"/>
+  <path d="M93 171h27v48H93zm32-40h27v88h-27zm32 20h27v68h-27z" fill="#328bde"/>
+  <path d="M93 171h27v4H93zm32-40h27v4h-27zm32 20h27v4h-27z" fill="#cfe7ff"/>
+  <text x="236" y="167" fill="#f4f7fb" font-family="Arial,Helvetica,sans-serif" font-size="56" font-weight="700">ChatGPT</text>
+  <text x="236" y="228" fill="#f4f7fb" font-family="Arial,Helvetica,sans-serif" font-size="56" font-weight="700">Limit Tracker</text>
+  <text x="78" y="311" fill="#b9cada" font-family="Arial,Helvetica,sans-serif" font-size="24">Токены беседы сверху · usage Work / Codex снизу</text>
+
+  <rect x="75" y="357" width="1050" height="197" rx="24" fill="#171b22" stroke="#91b5d9" stroke-opacity=".27"/>
+  <path d="M103 421h995" stroke="#ffffff" stroke-opacity=".10"/>
+  <rect x="107" y="387" width="7" height="17" rx="1" fill="#328bde"/>
+  <rect x="119" y="379" width="7" height="25" rx="1" fill="#328bde"/>
+  <rect x="131" y="371" width="7" height="33" rx="1" fill="#328bde"/>
+  <text x="156" y="398" fill="#e6f0f9" font-family="Arial,Helvetica,sans-serif" font-size="24">≈ tokens / current conversation</text>
+  <text x="106" y="468" fill="#bdccdb" font-family="Arial,Helvetica,sans-serif" font-size="18">Сессия · 5 ч</text>
+  <text x="637" y="468" fill="#bdccdb" font-family="Arial,Helvetica,sans-serif" font-size="18">Неделя</text>
+  <rect x="106" y="486" width="440" height="13" rx="6" fill="#4a5360"/>
+  <rect x="106" y="486" width="113" height="13" rx="6" fill="url(#bar)"/>
+  <rect x="637" y="486" width="440" height="13" rx="6" fill="#4a5360"/>
+  <rect x="637" y="486" width="308" height="13" rx="6" fill="url(#bar)"/>
+  <text x="106" y="532" fill="#8299ad" font-family="Arial,Helvetica,sans-serif" font-size="14">CHROME MV3  ·  OPEN SOURCE  ·  NO API KEY</text>
+  <text x="76" y="596" fill="#8299ad" font-family="Arial,Helvetica,sans-serif" font-size="15">Для chatgpt.com</text>
+</svg>

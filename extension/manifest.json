@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "minimum_chrome_version": "120",
+  "name": "ChatGPT Limit Tracker",
+  "version": "1.0.1",
+  "description": "Токены беседы сверху и usage Work / Codex под полем ввода на ChatGPT.",
+  "permissions": ["storage"],
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "action": {
+    "default_title": "ChatGPT Limit Tracker",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*"],
+      "js": ["core.js", "bridge.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://chatgpt.com/*"],
+      "js": ["core.js", "tokenizer.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
